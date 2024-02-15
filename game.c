@@ -218,22 +218,22 @@ int	key_event(int keycode, t_data *data)
 	if (keycode == XK_LEFT)
 	{
 		//both camera direction and camera plane must be rotated
-		double oldDirX = data->player.dir.x;
-		data->player.dir.x = data->player.dir.x * cos(rotSpeed) - data->player.dir.y * sin(rotSpeed);
-		data->player.dir.y = oldDirX * sin(rotSpeed) + data->player.dir.y * cos(rotSpeed);
-		double oldPlaneX = data->player.plane.x;
-		data->player.plane.x = data->player.plane.x * cos(rotSpeed) - data->player.plane.y * sin(rotSpeed);
-		data->player.plane.y = oldPlaneX * sin(rotSpeed) + data->player.plane.y * cos(rotSpeed);
-	}
-	if (keycode == XK_RIGHT)
-	{
-		//both camera direction and camera plane must be rotated
       double oldDirX = data->player.dir.x;
       data->player.dir.x = data->player.dir.x * cos(-rotSpeed) - data->player.dir.y * sin(-rotSpeed);
       data->player.dir.y = oldDirX * sin(-rotSpeed) + data->player.dir.y * cos(-rotSpeed);
       double oldPlaneX = data->player.plane.x;
       data->player.plane.x = data->player.plane.x * cos(-rotSpeed) - data->player.plane.y * sin(-rotSpeed);
       data->player.plane.y = oldPlaneX * sin(-rotSpeed) + data->player.plane.y * cos(-rotSpeed);
+	}
+	if (keycode == XK_RIGHT)
+	{
+		//both camera direction and camera plane must be rotated
+		double oldDirX = data->player.dir.x;
+		data->player.dir.x = data->player.dir.x * cos(rotSpeed) - data->player.dir.y * sin(rotSpeed);
+		data->player.dir.y = oldDirX * sin(rotSpeed) + data->player.dir.y * cos(rotSpeed);
+		double oldPlaneX = data->player.plane.x;
+		data->player.plane.x = data->player.plane.x * cos(rotSpeed) - data->player.plane.y * sin(rotSpeed);
+		data->player.plane.y = oldPlaneX * sin(rotSpeed) + data->player.plane.y * cos(rotSpeed);
 	}
 	if (keycode == XK_UP)
 	{
