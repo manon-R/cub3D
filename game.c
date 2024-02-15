@@ -209,13 +209,24 @@ int	raycasting(t_data *data)
 	return (0);
 }
 
+int	exit_hook(t_data *data)
+{
+	// ft_destroy_img(data);
+	mlx_clear_window(data->mlx, data->win);
+	mlx_destroy_window(data->mlx, data->win);
+	mlx_destroy_display(data->mlx);
+	free(data->mlx);
+	exit(SUCCESS);
+}
+
+
 int	key_event(int keycode, t_data *data)
 {
     double moveSpeed = 0.2; //// const a definir
     double rotSpeed = 0.05; // const a definir
-	// if (keycode == XK_ESCAPE)
-	// 	return (exit_hook(vars), 0);
-	if (keycode == XK_LEFT)
+	if (keycode == XK_ESCAPE)
+		return (exit_hook(data), 0);
+	if (keycode == XK_LEFT) //LEFT CAM
 	{
 		//both camera direction and camera plane must be rotated
       double oldDirX = data->player.dir.x;
@@ -225,7 +236,7 @@ int	key_event(int keycode, t_data *data)
       data->player.plane.x = data->player.plane.x * cos(-rotSpeed) - data->player.plane.y * sin(-rotSpeed);
       data->player.plane.y = oldPlaneX * sin(-rotSpeed) + data->player.plane.y * cos(-rotSpeed);
 	}
-	if (keycode == XK_RIGHT)
+	if (keycode == XK_RIGHT) //RIGHT CAM
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = data->player.dir.x;
@@ -235,19 +246,33 @@ int	key_event(int keycode, t_data *data)
 		data->player.plane.x = data->player.plane.x * cos(rotSpeed) - data->player.plane.y * sin(rotSpeed);
 		data->player.plane.y = oldPlaneX * sin(rotSpeed) + data->player.plane.y * cos(rotSpeed);
 	}
-	if (keycode == XK_UP)
+	if (keycode == XK_W || keycode == XK_UP)
 	{
 		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x + data->player.dir.x * moveSpeed)] != '1')
 			data->player.pos.x += data->player.dir.x * moveSpeed;
 		if(data->map[(int)(data->player.pos.y + data->player.dir.y * moveSpeed)][(int)data->player.pos.x] != '1')
 			data->player.pos.y += data->player.dir.y * moveSpeed;
 	}
-	if (keycode == XK_DOWN)
+	if (keycode == XK_S || keycode == XK_DOWN)
 	{
 		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x - data->player.dir.x * moveSpeed)] != '1')
 			data->player.pos.x -= data->player.dir.x * moveSpeed;
 		if(data->map[(int)(data->player.pos.y - data->player.dir.y * moveSpeed)][(int)data->player.pos.x] != '1')
 			data->player.pos.y -= data->player.dir.y * moveSpeed;
+	}
+	if (keycode == XK_A) //LEFT
+	{
+		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x + data->player.dir.y * moveSpeed)] != '1')
+			data->player.pos.x += data->player.dir.y * moveSpeed;
+		if(data->map[(int)(data->player.pos.y - data->player.dir.x * moveSpeed)][(int)data->player.pos.x] != '1')
+			data->player.pos.y -= data->player.dir.x * moveSpeed;
+	}
+	if (keycode == XK_D) //RIGHT
+	{
+		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x - data->player.dir.y * moveSpeed)] != '1')
+			data->player.pos.x -= data->player.dir.y * moveSpeed;
+		if(data->map[(int)(data->player.pos.y + data->player.dir.x * moveSpeed)][(int)data->player.pos.x] != '1')
+			data->player.pos.y += data->player.dir.x * moveSpeed;
 	}
 	raycasting(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img_ptr, 0, 0);
@@ -274,6 +299,7 @@ void	game_setup(t_data *data)
 					&bpp, &size_line, &endian);
 	raycasting(data);
 	mlx_hook(data->win, 2, 1L << 0, key_event, data);
+	mlx_hook(data->win, 17, 1L << 17, exit_hook, data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img_ptr, 0, 0);
 	mlx_loop(data->mlx);
 	mlx_destroy_image(data->mlx, data->img_data);

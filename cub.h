@@ -16,11 +16,21 @@
 # define HEIGHT			720
 # define TEXT_SIZE		64
 
-# define XK_ESCAPE                        0xff1b
-# define XK_LEFT                          0xff51  /* left arrow */
-# define XK_UP                            0xff52  /* up arrow */
-# define XK_RIGHT                         0xff53  /* right arrow */
-# define XK_DOWN                          0xff54  /* down arrow */
+/*
+XK_A: 0x0061 LEFT
+XK_W: 0x0077 UP
+XK_S: 0x0073 DOWN
+XK_D: 0x0064 RIGHT
+*/
+# define XK_ESCAPE		0xff1b
+# define XK_LEFT		0xff51  /* left arrow - turn camera */
+# define XK_UP			0xff52  /* up arrow */
+# define XK_RIGHT		0xff53  /* right arrow - turn camera */
+# define XK_DOWN		0xff54  /* down arrow */
+# define XK_W			0x0077	/* up */
+# define XK_S			0x0073	/* down */
+# define XK_A			0x0061	/* left move */
+# define XK_D			0x0064	/* right move */
 
 # define ARG_ERR		"1 argument required (*.cub file)"
 # define END_MAP		"Map not the final element of the file"
