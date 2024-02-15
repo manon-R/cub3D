@@ -9,7 +9,7 @@ CFLAGS	= -Wall -Wextra -Werror -g3
 NAME	= cub3D
 
 ${NAME}: ${OBJS}
-				${CC} ${CFLAGS} ${OBJS} -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o ${NAME} 
+				${CC} ${CFLAGS} ${OBJS} -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -lm -o ${NAME} 
 all:	${NAME}
 
 clean:

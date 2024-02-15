@@ -5,7 +5,9 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <math.h>
 # include "mlx_linux/mlx.h"
+# include <X11/X.h>
 
 # define BUFFER_SIZE	1024
 # define FAIL			1
@@ -13,6 +15,12 @@
 # define WIDTH			960
 # define HEIGHT			720
 # define TEXT_SIZE		64
+
+# define XK_ESCAPE                        0xff1b
+# define XK_LEFT                          0xff51  /* left arrow */
+# define XK_UP                            0xff52  /* up arrow */
+# define XK_RIGHT                         0xff53  /* right arrow */
+# define XK_DOWN                          0xff54  /* down arrow */
 
 # define ARG_ERR		"1 argument required (*.cub file)"
 # define END_MAP		"Map not the final element of the file"
