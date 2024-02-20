@@ -79,11 +79,6 @@ void	draw_wall(t_data *data, int lineHeight, int x, int side)
 	color = get_color(data);
 	if (side == 1)
 		color /= 2;
-	// if (pov == '?')
-	// 	return ;
-	// char *text_addr;
-	// init_text_image(data, &text_addr, "./textures/wall.xpm");
-	// color = *(int *)text_addr;// +qqle chose pour avoir la couleur du bon pixel
 	draw_start = (-lineHeight / 2) + (HEIGHT / 2);
 	if (draw_start < 0)
 		draw_start = 0;
@@ -122,163 +117,128 @@ void	draw_background(t_data *data)
 	}
 }
 
+void	init_raycast(t_raycast *ray, t_data *data, int x)
+{
+	ray->camera.x = 2 * x / (double) WIDTH - 1;
+	ray->ray_dir.x = data->player.dir.x + data->player.plane.x * ray->camera.x;
+	ray->ray_dir.y = data->player.dir.y + data->player.plane.y * ray->camera.x;
+	ray->map_x = (int) data->player.pos.x;
+	ray->map_y = (int) data->player.pos.y;
+	ray->delta_dist.x = (ray->ray_dir.x == 0) ? 1e30 : fabs(1 / ray->ray_dir.x);
+	ray->delta_dist.y = (ray->ray_dir.y == 0) ? 1e30 : fabs(1 / ray->ray_dir.y);
+	ray->hit = 0;
+	ray->side = 0;
+}
+
+void	init_step_and_side(t_raycast *ray, t_data *data)
+{
+	if (ray->ray_dir.x < 0)
+	{
+		ray->step_x = -1;
+		ray->side_dist.x = (data->player.pos.x - ray->map_x) * ray->delta_dist.x;
+	}
+	else
+	{
+		ray->step_x = 1;
+		ray->side_dist.x = (ray->map_x + 1.0 - data->player.pos.x) * ray->delta_dist.x;
+	}
+	if (ray->ray_dir.y < 0)
+	{
+		ray->step_y = -1;
+		ray->side_dist.y = (data->player.pos.y - ray->map_y) * ray->delta_dist.y;
+	}
+	else
+	{
+		ray->step_y = 1;
+		ray->side_dist.y = (ray->map_y + 1.0 - data->player.pos.y) * ray->delta_dist.y;
+	}
+}
+
 int	raycasting(t_data *data)
 {
-	int	x;
+	int			x;
+	t_raycast	ray;
 
 	x = 0;
 	draw_background(data);
 	while( x < WIDTH)
 	{
-		//calculate ray position and direction
-		double cameraX = 2 * x / (double) WIDTH - 1; //x-coordinate in camera space
-		double rayDirX = data->player.dir.x + data->player.plane.x * cameraX;
-		double rayDirY = data->player.dir.y + data->player.plane.y * cameraX;
-
-		//which box of the map we're in
-		int mapX = (int) data->player.pos.x;
-		int mapY = (int) data->player.pos.y;
-
-		//length of ray from current position to next x or y-side
-		double sideDistX;
-		double sideDistY;
-
-		//length of ray from one x or y-side to next x or y-side
-		double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-		double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
-		double perpWallDist;
-
-		//what direction to step in x or y-direction (either +1 or -1)
-		int	stepX;
-		int	stepY;
-
-		int hit = 0; //was there a wall hit?
-		int side = 0; //was a NS or a EW wall hit?
-		//calculate step and initial sideDist
-		if (rayDirX < 0)
-		{
-			stepX = -1;
-			sideDistX = (data->player.pos.x - mapX) * deltaDistX;
-		}
-		else
-		{
-			stepX = 1;
-			sideDistX = (mapX + 1.0 - data->player.pos.x) * deltaDistX;
-		}
-		if (rayDirY < 0)
-		{
-			stepY = -1;
-			sideDistY = (data->player.pos.y - mapY) * deltaDistY;
-		}
-		else
-		{
-			stepY = 1;
-			sideDistY = (mapY + 1.0 - data->player.pos.y) * deltaDistY;
-		}
-		//perform DDA
-		while (hit == 0)
+		init_raycast(&ray, data, x);
+		init_step_and_side(&ray, data);
+///////////////////////////////////////perform DDA///////////////////////////////////////////
+		while (ray.hit == 0)
 		{
 			//jump to next map square, either in x-direction, or in y-direction
-			if (sideDistX < sideDistY)
+			if (ray.side_dist.x < ray.side_dist.y)
 			{
-				sideDistX += deltaDistX;
-				mapX += stepX;
-				side = 0;
+				ray.side_dist.x += ray.delta_dist.x;
+				ray.map_x += ray.step_x;
+				ray.side = 0;
 			}
 			else
 			{
-				sideDistY += deltaDistY;
-				mapY += stepY;
-				side = 1;
+				ray.side_dist.y += ray.delta_dist.y;
+				ray.map_y += ray.step_y;
+				ray.side = 1;
 			}
 			//Check if ray has hit a wall
 			
-			if (data->map[mapY][mapX] == '1') 
-				hit = 1; // Inverser X et Y?
+			if (data->map[ray.map_y][ray.map_x] == '1') 
+				ray.hit = 1; // Inverser X et Y?
 		}
 		// //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
-		if(side == 0)
-			perpWallDist = (sideDistX - deltaDistX);
+		if(ray.side == 0)
+			ray.perpWallDist = (ray.side_dist.x - ray.delta_dist.x);
 		else
-			perpWallDist = (sideDistY - deltaDistY);
+			ray.perpWallDist = (ray.side_dist.y - ray.delta_dist.y);
 		// //Calculate height of line to draw on screen
-		int lineHeight = (int)(HEIGHT / perpWallDist);
-		draw_wall(data, lineHeight, x, side);
+		int lineHeight = (int)(HEIGHT / ray.perpWallDist);
+//////////////////////////////////////////////////////////////////////////////////////////
+		 //calculate lowest and highest pixel to fill in current stripe
+		int drawStart = -lineHeight / 2 + HEIGHT / 2;
+		if(drawStart < 0) drawStart = 0;
+		int drawEnd = lineHeight / 2 + HEIGHT / 2;
+		if(drawEnd >= HEIGHT) drawEnd = HEIGHT - 1;
+
+		//calculate value of wallX
+		double wallX; //where exactly the wall was hit
+		if (ray.side == 0) 
+			wallX = data->player.pos.y + ray.perpWallDist * ray.ray_dir.y;
+		else
+			wallX = data->player.pos.x + ray.perpWallDist * ray.ray_dir.x;
+		wallX -= floor((wallX));
+
+		//x coordinate on the texture
+		int texX = (int)(wallX * (double)TEXT_SIZE);
+		if(ray.side == 0 && ray.ray_dir.x > 0) 
+			texX = TEXT_SIZE - texX - 1;
+		if(ray.side == 1 && ray.ray_dir.y < 0) 
+			texX = TEXT_SIZE - texX - 1;
+		       // How much to increase the texture coordinate per screen pixel
+		double step = 1.0 * TEXT_SIZE/ lineHeight;
+		// Starting texture coordinate
+		double texPos = (drawStart - HEIGHT / 2 + lineHeight / 2) * step;
+		int y = drawStart;
+		t_text text;
+		text = init_text_image(data, "./textures/wall.xpm");
+		while (y < drawEnd)
+		{
+			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+			int texY = (int)texPos & (TEXT_SIZE - 1);
+			texPos += step;
+			int pixel =  ((TEXT_SIZE * texY + texX) * 4);
+			char *dest = text.img_a + pixel;
+			int color = *(int *)dest;
+			//make color darker for y-sides
+			if(ray.side == 1) 
+				color = (color >> 1) & 8355711;
+			put_pixel_color(data, x, y, color);
+			y++;
+		}
 		x++;
 	}
 	return (0);
 }
-
-int	exit_hook(t_data *data)
-{
-	// ft_destroy_img(data);
-	mlx_clear_window(data->mlx, data->win);
-	mlx_destroy_window(data->mlx, data->win);
-	mlx_destroy_display(data->mlx);
-	free(data->mlx);
-	exit(SUCCESS);
-}
-
-
-int	key_event(int keycode, t_data *data)
-{
-    double moveSpeed = 0.2; //// const a definir
-    double rotSpeed = 0.05; // const a definir
-	if (keycode == XK_ESCAPE)
-		return (exit_hook(data), 0);
-	if (keycode == XK_LEFT) //LEFT CAM
-	{
-		//both camera direction and camera plane must be rotated
-      double oldDirX = data->player.dir.x;
-      data->player.dir.x = data->player.dir.x * cos(-rotSpeed) - data->player.dir.y * sin(-rotSpeed);
-      data->player.dir.y = oldDirX * sin(-rotSpeed) + data->player.dir.y * cos(-rotSpeed);
-      double oldPlaneX = data->player.plane.x;
-      data->player.plane.x = data->player.plane.x * cos(-rotSpeed) - data->player.plane.y * sin(-rotSpeed);
-      data->player.plane.y = oldPlaneX * sin(-rotSpeed) + data->player.plane.y * cos(-rotSpeed);
-	}
-	if (keycode == XK_RIGHT) //RIGHT CAM
-	{
-		//both camera direction and camera plane must be rotated
-		double oldDirX = data->player.dir.x;
-		data->player.dir.x = data->player.dir.x * cos(rotSpeed) - data->player.dir.y * sin(rotSpeed);
-		data->player.dir.y = oldDirX * sin(rotSpeed) + data->player.dir.y * cos(rotSpeed);
-		double oldPlaneX = data->player.plane.x;
-		data->player.plane.x = data->player.plane.x * cos(rotSpeed) - data->player.plane.y * sin(rotSpeed);
-		data->player.plane.y = oldPlaneX * sin(rotSpeed) + data->player.plane.y * cos(rotSpeed);
-	}
-	if (keycode == XK_W || keycode == XK_UP)
-	{
-		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x + data->player.dir.x * moveSpeed)] != '1')
-			data->player.pos.x += data->player.dir.x * moveSpeed;
-		if(data->map[(int)(data->player.pos.y + data->player.dir.y * moveSpeed)][(int)data->player.pos.x] != '1')
-			data->player.pos.y += data->player.dir.y * moveSpeed;
-	}
-	if (keycode == XK_S || keycode == XK_DOWN)
-	{
-		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x - data->player.dir.x * moveSpeed)] != '1')
-			data->player.pos.x -= data->player.dir.x * moveSpeed;
-		if(data->map[(int)(data->player.pos.y - data->player.dir.y * moveSpeed)][(int)data->player.pos.x] != '1')
-			data->player.pos.y -= data->player.dir.y * moveSpeed;
-	}
-	if (keycode == XK_A) //LEFT
-	{
-		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x + data->player.dir.y * moveSpeed)] != '1')
-			data->player.pos.x += data->player.dir.y * moveSpeed;
-		if(data->map[(int)(data->player.pos.y - data->player.dir.x * moveSpeed)][(int)data->player.pos.x] != '1')
-			data->player.pos.y -= data->player.dir.x * moveSpeed;
-	}
-	if (keycode == XK_D) //RIGHT
-	{
-		if(data->map[(int)data->player.pos.y][(int)(data->player.pos.x - data->player.dir.y * moveSpeed)] != '1')
-			data->player.pos.x -= data->player.dir.y * moveSpeed;
-		if(data->map[(int)(data->player.pos.y + data->player.dir.x * moveSpeed)][(int)data->player.pos.x] != '1')
-			data->player.pos.y += data->player.dir.x * moveSpeed;
-	}
-	raycasting(data);
-	mlx_put_image_to_window(data->mlx, data->win, data->img_ptr, 0, 0);
-	return (SUCCESS);
-}
-
 
 void	game_setup(t_data *data)
 {
@@ -308,3 +268,12 @@ void	game_setup(t_data *data)
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
 }
+
+
+/*
+	// if (pov == '?')
+	// 	return ;
+	// char *text_addr;
+	// init_text_image(data, &text_addr, "./textures/wall.xpm");
+	// color = *(int *)text_addr;// +qqle chose pour avoir la couleur du bon pixel
+*/

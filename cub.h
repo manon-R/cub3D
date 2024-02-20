@@ -15,6 +15,8 @@
 # define WIDTH			960
 # define HEIGHT			720
 # define TEXT_SIZE		64
+# define MOVE_SPEED		0.2
+# define ROT_SPEED		0.05
 
 /*
 XK_A: 0x0061 LEFT
@@ -112,6 +114,22 @@ typedef struct s_data
 	t_player	player;
 }					t_data;
 
+typedef struct s_raycast
+{
+	t_vector	camera;
+	t_vector	ray_dir;
+	t_vector	side_dist;
+	t_vector	delta_dist;
+	double		perpWallDist;
+	int			map_x;
+	int			map_y;
+	int			step_x;
+	int			step_y;
+	int			hit;
+	int			side;
+	int			line_height;
+}					t_raycast;
+
 typedef struct s_axe
 {
 	int	*dx;
@@ -140,6 +158,7 @@ int		check_text(t_data *data, char **text);
 int		count_line_file(int fd);
 int		create_dir(t_data *data, char **text);
 int		create_skyfloor(t_data *data, char **text);
+int		exit_hook(t_data *data);
 int		extract_raw_data(char **content, int fd);
 int		ft_dfs(int y, int x, char **map);
 int		ft_isdigit(int c);
@@ -158,8 +177,10 @@ int		is_space(char c);
 int		is_text_line(char *line);
 int		is_valid_color_format(char **tab);
 int		is_valid_texture_direction(char **tab);
+int		key_event(int keycode, t_data *data);
 int		line_size(char **map);
 int		parser(char *file, t_data *data);
+int		raycasting(t_data *data);
 int		split_text_map(char **content, t_data *data);
 int		ft_tablen(char **tab);
 
