@@ -31,11 +31,6 @@ int	init_dir_textures(t_data *data)
 	return (SUCCESS);
 }
 
-int	rgb_to_int(unsigned char r, unsigned char g, unsigned char b)
-{
-	return ((r << 16) | (g << 8) | b);
-}
-
 void	game_setup(t_data *data)
 {
 	int	bpp;
@@ -49,7 +44,7 @@ void	game_setup(t_data *data)
 	if (!data->win)
 		return (free(data->mlx), error_mess(MLX_WIN));
 	if (init_dir_textures(data) == FAIL)
-		return (free(data->mlx), error_mess(MLX_IMG));
+		return (free(data->mlx));
 	data->img_ptr = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	data->img_data = mlx_get_data_addr(data->img_ptr, \
 					&bpp, &size_line, &endian);
@@ -58,7 +53,7 @@ void	game_setup(t_data *data)
 	mlx_hook(data->win, 17, 1L << 17, exit_hook, data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img_ptr, 0, 0);
 	mlx_loop(data->mlx);
-	mlx_destroy_image(data->mlx, data->img_data);
+	ft_destroy_img(data);
 	mlx_clear_window(data->mlx, data->win);
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_display(data->mlx);

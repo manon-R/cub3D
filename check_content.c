@@ -83,7 +83,6 @@ int	check_map(t_data *data)
 {
 	char	**map_cpy;
 
-	//check size map / taille de la window Ou definir une taille max
 	if (check_valid_char(data) == FAIL)
 		return (FAIL);
 	map_cpy = duplicate_map(data);

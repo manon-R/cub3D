@@ -40,8 +40,6 @@ void	draw_wall(t_data *data, t_draw_data *draw, int x, t_raycast *ray)
 		text = get_text(*ray, *data);
 		dest = text.img_a + pixel;
 		color = *(int *)dest;
-		if (ray->side == 1)
-			color = (color >> 1) & 8355711;
 		put_pixel_color(data, x, y, color);
 		y++;
 	}
@@ -53,7 +51,6 @@ void	draw_background(t_data *data)
 	int	y;
 
 	y = 0;
-	data->fc_tab.c_color = 0xABCDEF;
 	while (y < HEIGHT / 2)
 	{
 		x = 0;
@@ -61,7 +58,6 @@ void	draw_background(t_data *data)
 			put_pixel_color(data, x++, y, data->fc_tab.c_color);
 		y++;
 	}
-	data->fc_tab.f_color = 0x977D76;
 	while (y < HEIGHT)
 	{
 		x = 0;

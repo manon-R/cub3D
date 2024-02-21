@@ -1,5 +1,10 @@
 #include "cub.h"
 
+static int	rgb_to_int(unsigned char r, unsigned char g, unsigned char b)
+{
+	return ((r << 16) | (g << 8) | b);
+}
+
 int	create_skyfloor(t_data *data, char **text)
 {
 	if (text[0][0] == 'F' && (!data->fc_tab.f))
@@ -7,6 +12,10 @@ int	create_skyfloor(t_data *data, char **text)
 		data->fc_tab.f = ft_split(text[1], ",\t");
 		if (!data->fc_tab.f)
 			return (error_mess(MALLOC_ERR), FAIL);
+		data->fc_tab.f_color = rgb_to_int(\
+								(unsigned char)ft_atoi(data->fc_tab.f[0]), \
+								(unsigned char)ft_atoi(data->fc_tab.f[1]), \
+								(unsigned char)ft_atoi(data->fc_tab.f[2]));
 		return (SUCCESS);
 	}
 	else if (text[0][0] == 'C' && (!data->fc_tab.c))
@@ -14,6 +23,10 @@ int	create_skyfloor(t_data *data, char **text)
 		data->fc_tab.c = ft_split(text[1], ",\t");
 		if (!data->fc_tab.c)
 			return (error_mess(MALLOC_ERR), FAIL);
+		data->fc_tab.c_color = rgb_to_int(\
+								(unsigned char)ft_atoi(data->fc_tab.c[0]), \
+								(unsigned char)ft_atoi(data->fc_tab.c[1]), \
+								(unsigned char)ft_atoi(data->fc_tab.c[2]));
 		return (SUCCESS);
 	}
 	return (error_mess(DUPLICATE_FC), FAIL);

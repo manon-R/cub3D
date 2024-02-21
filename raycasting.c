@@ -11,7 +11,7 @@ static void	init_raycast(t_raycast *ray, t_data *data, int x)
 		ray->delta_dist.x = 1e30;
 	else
 		ray->delta_dist.x = fabs(1 / ray->ray_dir.x);
-	if ((ray->ray_dir.y == 0))
+	if (ray->ray_dir.y == 0)
 		ray->delta_dist.y = 1e30;
 	else
 		ray->delta_dist.y = fabs(1 / ray->ray_dir.y);

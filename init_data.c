@@ -42,8 +42,8 @@ static int	create_player(t_data *data, char pov, int i, int j)
 	if (data->player.pov != '0')
 		return (error_mess(TOO_MANY_P), FAIL);
 	player.pov = pov;
-	position.x = j;
-	position.y = i;
+	position.x = j + 0.5;
+	position.y = i + 0.5;
 	plane.x = 0;
 	plane.y = 0.66;
 	player.pos = position;

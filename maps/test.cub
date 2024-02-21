@@ -1,21 +1,21 @@
-NO ./textures/wall.xpm
+NO ./textures/yellowmaze.xpm
 
-SO ./textures/wall.xpm
+SO ./textures/mazeblue.xpm
 
-WE ./textures/wall.xpm
+WE ./textures/mazered.xpm
 
-EA ./textures/wall.xpm
-
-
+EA ./textures/greenmaze.xpm
 
 
 
 
-F 220,100,200
+
+
+F 151,125,118
 
 
 
-C 225,30,0
+C 171,205,239
 
 
 

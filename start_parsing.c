@@ -18,12 +18,12 @@ int	parser(char *file, t_data *data)
 	if (fd < 0)
 		return (error_mess(NULL), perror(file), free_all(content), FAIL);
 	if (extract_raw_data(content, fd) == FAIL || !content)
-		return (free_all(content), FAIL);
+		return (free_all(content), close(fd), FAIL);
 	if (split_text_map(content, data) == FAIL || check_all_elem(data) == FAIL)
-		return (FAIL);
+		return (free_all(content), close(fd), FAIL);
 	if (init_player(data, data->map) == FAIL)
 		return (clean(fd, content, data), FAIL);
 	if (check_map(data) == FAIL)
 		return (clean(fd, content, data), FAIL);
-	return (SUCCESS);
+	return (free_all(content), SUCCESS);
 }
