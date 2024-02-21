@@ -65,6 +65,11 @@ typedef struct s_vector{
 	double	y;
 }					t_vector;
 
+typedef struct s_ivector{
+	int	x;
+	int	y;
+}					t_ivector;
+
 typedef struct s_dir_path{
 	char	*no;
 	char	*so;
@@ -120,15 +125,22 @@ typedef struct s_raycast
 	t_vector	ray_dir;
 	t_vector	side_dist;
 	t_vector	delta_dist;
-	double		perpWallDist;
-	int			map_x;
-	int			map_y;
-	int			step_x;
-	int			step_y;
+	t_ivector			map;
+	t_ivector			step;
+	double		perp_wallDist;
 	int			hit;
 	int			side;
 	int			line_height;
 }					t_raycast;
+
+typedef struct s_draw_data
+{
+	t_ivector			draw_se;
+	t_ivector			tex;
+	double		wall_x;
+	double		step;
+	double		tex_pos;
+}					t_draw_data;
 
 typedef struct s_axe
 {
@@ -188,6 +200,8 @@ void	clean(int fd, char **content, t_data *data);
 void	display_map(char **map);
 void	display_skyfloor_color(t_data *data);
 void	display_text(t_data *data);
+void	draw_background(t_data *data);
+void	draw_wall(t_data *data, t_draw_data *draw, int x, t_raycast *ray);
 void	error_mess(char *mess);
 void	free_all(char **result);
 void	ft_bzero(void *s, size_t n);
