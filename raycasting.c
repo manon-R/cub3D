@@ -67,10 +67,10 @@ static void	perform_dda(t_raycast *ray, t_data *data)
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
-		ray->perp_wallDist = (ray->side_dist.x - ray->delta_dist.x);
+		ray->perp_wall_dist = (ray->side_dist.x - ray->delta_dist.x);
 	else
-		ray->perp_wallDist = (ray->side_dist.y - ray->delta_dist.y);
-	ray->line_height = (int)(HEIGHT / ray->perp_wallDist);
+		ray->perp_wall_dist = (ray->side_dist.y - ray->delta_dist.y);
+	ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
 }
 
 static void	init_draw_data(t_draw_data *draw, t_data *data, t_raycast ray)
@@ -82,9 +82,9 @@ static void	init_draw_data(t_draw_data *draw, t_data *data, t_raycast ray)
 	if (draw->draw_se.y >= HEIGHT)
 		draw->draw_se.y = HEIGHT - 1;
 	if (ray.side == 0)
-		draw->wall_x = data->player.pos.y + ray.perp_wallDist * ray.ray_dir.y;
+		draw->wall_x = data->player.pos.y + ray.perp_wall_dist * ray.ray_dir.y;
 	else
-		draw->wall_x = data->player.pos.x + ray.perp_wallDist * ray.ray_dir.x;
+		draw->wall_x = data->player.pos.x + ray.perp_wall_dist * ray.ray_dir.x;
 	draw->wall_x -= floor((draw->wall_x));
 	draw->tex.x = (int)(draw->wall_x * (double)TEXT_SIZE);
 	if (ray.side == 0 && ray.ray_dir.x > 0)

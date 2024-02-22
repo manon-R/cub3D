@@ -1,21 +1,5 @@
 #include "cub.h"
 
-void	ft_destroy_img(t_data *data)
-{
-	c_texture(data);
-	if (data->dir_text.e.img_p)
-		mlx_destroy_image(data->mlx, data->dir_text.e.img_p);
-	if (data->dir_text.n.img_p)
-		mlx_destroy_image(data->mlx, data->dir_text.n.img_p);
-	if (data->dir_text.s.img_p)
-		mlx_destroy_image(data->mlx, data->dir_text.s.img_p);
-	if (data->dir_text.w.img_p)
-		mlx_destroy_image(data->mlx, data->dir_text.w.img_p);
-	if (data->img_ptr)
-		mlx_destroy_image(data->mlx, data->img_ptr);
-}
-
-
 int	exit_hook(t_data *data)
 {
 	ft_destroy_img(data);

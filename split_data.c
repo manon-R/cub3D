@@ -77,7 +77,6 @@ int	split_text_map(char **content, t_data *data)
 				return (free_all(text), text = NULL, FAIL);
 			c = 't';
 			free_all(text);
-			text = NULL;
 		}
 		else
 			c = 'm';
