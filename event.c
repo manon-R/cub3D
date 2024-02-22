@@ -2,8 +2,14 @@
 
 void	ft_destroy_img(t_data *data)
 {
-	// free_all(data->map);
-	// data->map = NULL;
+	free_all(data->map);
+	data->map = NULL;
+	free_all(data->fc_tab.c);
+	free_all(data->fc_tab.f);
+	free(data->dir_tab.ea);
+	free(data->dir_tab.no);
+	free(data->dir_tab.so);
+	free(data->dir_tab.we);
 	mlx_destroy_image(data->mlx, data->dir_text.e.img_p);
 	mlx_destroy_image(data->mlx, data->dir_text.n.img_p);
 	mlx_destroy_image(data->mlx, data->dir_text.s.img_p);

@@ -17,7 +17,7 @@ int	parser(char *file, t_data *data)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (error_mess(NULL), perror(file), free_all(content), FAIL);
-	if (extract_raw_data(content, fd) == FAIL || !content)
+	if (extract_raw_data(content, fd) == FAIL)
 		return (free_all(content), close(fd), FAIL);
 	if (split_text_map(content, data) == FAIL || check_all_elem(data) == FAIL)
 		return (free_all(content), close(fd), FAIL);
@@ -25,5 +25,5 @@ int	parser(char *file, t_data *data)
 		return (clean(fd, content, data), FAIL);
 	if (check_map(data) == FAIL)
 		return (clean(fd, content, data), FAIL);
-	return (free_all(content), SUCCESS);
+	return (SUCCESS);
 }

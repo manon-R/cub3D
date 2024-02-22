@@ -49,10 +49,11 @@ static void	map_error(char **content, int index)
 	{
 		if (is_text_line(content[index]) == FAIL && \
 			is_empty_line(content[index]) == FAIL)
-			return (error_mess(WRONG_CHAR));
+			return (error_mess(WRONG_CHAR), free_all(content));
 		index++;
 	}
 	error_mess(END_MAP);
+	free_all(content);
 }
 
 int	split_text_map(char **content, t_data *data)
@@ -73,9 +74,10 @@ int	split_text_map(char **content, t_data *data)
 			if (!text)
 				return (error_mess(MALLOC_ERR), FAIL);
 			if (check_text(data, text) == FAIL)
-				return (free_all(text), FAIL);
+				return (free_all(text), text = NULL, FAIL);
 			c = 't';
 			free_all(text);
+			text = NULL;
 		}
 		else
 			c = 'm';
