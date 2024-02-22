@@ -44,5 +44,5 @@ int	parser(char *file, t_data *data)
 		return (free_all(content), close(fd), c_texture(data), FAIL);
 	if (check_map(data) == FAIL)
 		return (clean(fd, content, data), c_texture(data), FAIL);
-	return (free_all(content), SUCCESS);
+	return (free_all(content), close(fd), SUCCESS);
 }

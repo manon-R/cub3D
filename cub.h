@@ -102,8 +102,8 @@ typedef struct s_skyfloor{
 typedef struct s_player{
 	char		pov;
 	t_vector	pos;
-	t_vector	dir; // Direction du player selon pov ?
-	t_vector	plane; // Camera plane
+	t_vector	dir;
+	t_vector	plane;
 }					t_player;
 
 typedef struct s_data
