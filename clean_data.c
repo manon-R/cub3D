@@ -20,7 +20,23 @@ void	free_all(char **result)
 
 void	clean(int fd, char **content, t_data *data)
 {
-	free_all(content);
-	free((*data).map);
+	if (content)
+		free_all(content);
+	if (data->map)
+	{
+		free_all(data->map);
+		data->map = NULL;
+	}
 	close(fd);
+}
+
+void	final_clean(t_data *data)
+{
+	ft_destroy_img(data);
+	if (data->win)
+		mlx_destroy_window(data->mlx, data->win);
+	if (data->mlx)
+		mlx_destroy_display(data->mlx);
+	free(data->mlx);
+	exit(SUCCESS);
 }

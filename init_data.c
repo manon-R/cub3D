@@ -3,23 +3,21 @@
 void	init_data(t_data *data)
 {
 	data->map = NULL;
+	data->win = NULL;
+	data->img_ptr = NULL;
 	data->dir_tab.no = NULL;
 	data->dir_tab.so = NULL;
 	data->dir_tab.ea = NULL;
 	data->dir_tab.we = NULL;
+	data->dir_text.n.img_p = NULL;
+	data->dir_text.s.img_p = NULL;
+	data->dir_text.e.img_p = NULL;
+	data->dir_text.w.img_p = NULL;
 	data->fc_tab.f = NULL;
 	data->fc_tab.f_color = 0x0;
 	data->fc_tab.c = NULL;
 	data->fc_tab.c_color = 0x0;
 	data->player.pov = '0';
-}
-
-int	init_text(t_data *data, char **text)
-{
-	if (text[0][0] == 'F' || text[0][0] == 'C')
-		return (create_skyfloor(data, text));
-	else
-		return (create_dir(data, text));
 }
 
 t_vector	set_dir(char c)
@@ -33,10 +31,20 @@ t_vector	set_dir(char c)
 	return ((t_vector){0, -1});
 }
 
+t_vector	set_plane(char c)
+{
+	if (c == 'N')
+		return ((t_vector){0, 0.66});
+	if (c == 'S')
+		return ((t_vector){0, -0.66});
+	if (c == 'E')
+		return ((t_vector){-0.66, 0});
+	return ((t_vector){0.66, 0});
+}
+
 static int	create_player(t_data *data, char pov, int i, int j)
 {
 	t_vector	position;
-	t_vector	plane;
 	t_player	player;
 
 	if (data->player.pov != '0')
@@ -44,11 +52,9 @@ static int	create_player(t_data *data, char pov, int i, int j)
 	player.pov = pov;
 	position.x = j + 0.5;
 	position.y = i + 0.5;
-	plane.x = 0;
-	plane.y = 0.66;
 	player.pos = position;
-	player.plane = plane;
 	player.dir = set_dir(pov);
+	player.plane = set_plane(pov);
 	data->player = player;
 	return (SUCCESS);
 }

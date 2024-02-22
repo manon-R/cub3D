@@ -64,7 +64,7 @@ int	check_dfs(char **map_cpy)
 	int	j;
 
 	i = 0;
-	while (map_cpy[i])
+	while (map_cpy && map_cpy[i])
 	{
 		j = 0;
 		while (map_cpy[i][j])
@@ -83,6 +83,7 @@ int	check_map(t_data *data)
 {
 	char	**map_cpy;
 
+	map_cpy = NULL;
 	if (check_valid_char(data) == FAIL)
 		return (FAIL);
 	map_cpy = duplicate_map(data);

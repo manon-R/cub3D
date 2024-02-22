@@ -33,7 +33,8 @@ static int	extract_map(char **content, t_data *data)
 		return (FAIL);
 	while (content && content[i])
 	{
-		map[index++] = content[i++];
+		map[index++] = ft_strdup_start(content[i], 0, ft_strlen(content[i]));
+		i++;
 		if (!map[index - 1])
 			return (free_all(map), FAIL);
 	}
@@ -49,11 +50,10 @@ static void	map_error(char **content, int index)
 	{
 		if (is_text_line(content[index]) == FAIL && \
 			is_empty_line(content[index]) == FAIL)
-			return (error_mess(WRONG_CHAR), free_all(content));
+			return (error_mess(WRONG_CHAR));
 		index++;
 	}
 	error_mess(END_MAP);
-	free_all(content);
 }
 
 int	split_text_map(char **content, t_data *data)

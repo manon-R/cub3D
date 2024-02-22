@@ -10,8 +10,8 @@ int	main(int argc, char **argv)
 		if (check_file_extension(argv[1]) == FAIL || \
 			parser(argv[1], &data) == FAIL)
 			return (FAIL);
-		else
-			game_setup(&data);
+		else if (game_setup(&data) == SUCCESS)
+			launch_game(&data);
 	}
 	else
 		error_mess(ARG_ERR);

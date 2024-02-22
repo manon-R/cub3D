@@ -153,7 +153,6 @@ typedef struct t_cordo{
 	int	cols;
 }			t_sizemap;
 
-
 char	**duplicate_map(t_data *data);
 char	**ft_split(char *s, char *charset);
 
@@ -180,6 +179,7 @@ int		ft_strlen(char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_tablen(char **tab);
 int		find_nl(char *buffer);
+int		game_setup(t_data *data);
 int		init_player(t_data *data, char **map);
 int		init_text(t_data *data, char **text);
 int		is_dir(char *str);
@@ -197,6 +197,7 @@ int		parser(char *file, t_data *data);
 int		raycasting(t_data *data);
 int		split_text_map(char **content, t_data *data);
 
+void	c_texture(t_data *data);
 void	clean(int fd, char **content, t_data *data);
 void	display_map(char **map);
 void	display_skyfloor_color(t_data *data);
@@ -204,11 +205,12 @@ void	display_text(t_data *data);
 void	draw_background(t_data *data);
 void	draw_wall(t_data *data, t_draw_data *draw, int x, t_raycast *ray);
 void	error_mess(char *mess);
+void	final_clean(t_data *data);
 void	free_all(char **result);
 void	ft_bzero(void *s, size_t n);
 void	ft_destroy_img(t_data *data);
-void	game_setup(t_data *data);
 void	init_data(t_data *data);
+void	launch_game(t_data *data);
 
 t_axe	ft_init_axe(void);
 

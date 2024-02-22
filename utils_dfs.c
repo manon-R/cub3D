@@ -6,7 +6,7 @@
 /*   By: mle-bras <mle-bras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 16:26:42 by hrandria          #+#    #+#             */
-/*   Updated: 2024/02/12 13:20:07 by mle-bras         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:01:33 by mle-bras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	line_size(char **map)
 
 	i = 0;
 	max = ft_strlen(map[0]);
-	while (map[i])
+	while (map && map[i])
 	{
 		if (max < ft_strlen(map[i]))
 			max = ft_strlen(map[i]);

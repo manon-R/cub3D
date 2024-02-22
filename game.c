@@ -1,5 +1,13 @@
 #include "cub.h"
 
+int	init_text(t_data *data, char **text)
+{
+	if (text[0][0] == 'F' || text[0][0] == 'C')
+		return (create_skyfloor(data, text));
+	else
+		return (create_dir(data, text));
+}
+
 t_text	init_text_image(t_data *data, char *path)
 {
 	int		w;
@@ -31,7 +39,17 @@ int	init_dir_textures(t_data *data)
 	return (SUCCESS);
 }
 
-void	game_setup(t_data *data)
+void	launch_game(t_data *data)
+{
+	raycasting(data);
+	mlx_hook(data->win, 2, 1L << 0, key_event, data);
+	mlx_hook(data->win, 17, 1L << 17, exit_hook, data);
+	mlx_put_image_to_window(data->mlx, data->win, data->img_ptr, 0, 0);
+	mlx_loop(data->mlx);
+	final_clean(data);
+}
+
+int	game_setup(t_data *data)
 {
 	int	bpp;
 	int	size_line;
@@ -39,23 +57,16 @@ void	game_setup(t_data *data)
 
 	data->mlx = mlx_init();
 	if (!data->mlx)
-		return (error_mess(MLX_INIT));
+		return (error_mess(MLX_INIT), FAIL);
+	if (init_dir_textures(data) == FAIL)
+		return (final_clean(data), FAIL);
 	data->win = mlx_new_window(data->mlx, WIDTH, HEIGHT, "Cub3D");
 	if (!data->win)
-		return (free(data->mlx), error_mess(MLX_WIN));
-	if (init_dir_textures(data) == FAIL)
-		return (free(data->mlx));
+		return (free(data->mlx), error_mess(MLX_WIN), FAIL);
 	data->img_ptr = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	if (!data->img_ptr)
+		return (final_clean(data), FAIL);
 	data->img_data = mlx_get_data_addr(data->img_ptr, \
 					&bpp, &size_line, &endian);
-	raycasting(data);
-	mlx_hook(data->win, 2, 1L << 0, key_event, data);
-	mlx_hook(data->win, 17, 1L << 17, exit_hook, data);
-	mlx_put_image_to_window(data->mlx, data->win, data->img_ptr, 0, 0);
-	mlx_loop(data->mlx);
-	ft_destroy_img(data);
-	mlx_clear_window(data->mlx, data->win);
-	mlx_destroy_window(data->mlx, data->win);
-	mlx_destroy_display(data->mlx);
-	free(data->mlx);
+	return (SUCCESS);
 }
