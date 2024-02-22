@@ -36,6 +36,7 @@ XK_D: 0x0064 RIGHT
 
 # define ARG_ERR		"1 argument required (*.cub file)"
 # define END_MAP		"Map not the final element of the file"
+# define EMPTY_FILE		"Empty file"
 # define MALLOC_ERR		"Malloc error"
 # define NO_PLAYER		"One Player's POV required (N, S, E or W)"
 # define TOO_MANY_P		"Too many Player's POV in the map, only one required"
