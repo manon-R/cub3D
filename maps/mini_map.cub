@@ -1,0 +1,24 @@
+NO ./textures/yellowmaze.xpm
+
+SO ./textures/mazeblue.xpm
+
+WE ./textures/mazered.xpm
+
+EA ./textures/greenmaze.xpm
+
+
+
+
+F 151,125,118
+
+
+
+C 171,205,239
+
+
+1111111
+1000101
+101N101
+1011101
+1000001
+1111111

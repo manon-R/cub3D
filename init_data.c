@@ -23,23 +23,23 @@ void	init_data(t_data *data)
 t_vector	set_dir(char c)
 {
 	if (c == 'N')
-		return ((t_vector){1, 0});
+		return ((t_vector){0, -1});
 	if (c == 'S')
-		return ((t_vector){-1, 0});
-	if (c == 'E')
 		return ((t_vector){0, 1});
-	return ((t_vector){0, -1});
+	if (c == 'E')
+		return ((t_vector){1, 0});
+	return ((t_vector){-1, 0});
 }
 
 t_vector	set_plane(char c)
 {
 	if (c == 'N')
-		return ((t_vector){0, 0.66});
+		return ((t_vector){0.66, 0});
 	if (c == 'S')
-		return ((t_vector){0, -0.66});
-	if (c == 'E')
 		return ((t_vector){-0.66, 0});
-	return ((t_vector){0.66, 0});
+	if (c == 'E')
+		return ((t_vector){0, 0.66});
+	return ((t_vector){0, -0.66});
 }
 
 static int	create_player(t_data *data, char pov, int i, int j)
