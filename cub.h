@@ -35,14 +35,13 @@ XK_D: 0x0064 RIGHT
 # define XK_D			0x0064	/* right move */
 
 # define ARG_ERR		"1 argument required (*.cub file)"
+# define EMPTY_FILE		"Empty file"
 # define END_MAP		"Map not the final element of the file"
 # define MALLOC_ERR		"Malloc error"
 # define NO_PLAYER		"One Player's POV required (N, S, E or W)"
 # define TOO_MANY_P		"Too many Player's POV in the map, only one required"
-# define DUPLICATE_DIR	"Duplicate information in the file (only 1 line per \
-						direction, NO, SO, EA, WE)"
-# define DUPLICATE_FC	"Duplicate information in the file (only 2 line, 1 for \
-						floor and 1 for ceiling"
+# define DUPLICATE_DIR	"Duplicate texture information in the file"
+# define DUPLICATE_FC	"Duplicate Floor/Ceiling information in the file"
 # define MAP_MISS		"There's no map in this file"
 # define NO_MISS		"Northern texture is missing"
 # define SO_MISS		"Southern texture is missing"

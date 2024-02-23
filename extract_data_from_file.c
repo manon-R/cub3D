@@ -10,7 +10,7 @@ int	count_line_file(int fd)
 	c = '0';
 	result = get_next_line(fd);
 	if (!result)
-		return (error_mess(MALLOC_ERR), 0);
+		return (0);
 	size++;
 	while (result)
 	{

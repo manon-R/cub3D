@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   depthsearch.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mle-bras <mle-bras@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/11 16:24:24 by hrandria          #+#    #+#             */
-/*   Updated: 2024/02/22 15:03:51 by mle-bras         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub.h"
 
 t_sizemap	ft_rows_cols_map(char **map)
@@ -25,10 +13,13 @@ int	ft_is_valid(int px, int py, char **map)
 	t_sizemap	sizemap;
 
 	sizemap = ft_rows_cols_map(map);
-	sizemap.rows = ft_strlen(map[py]);
+	if (py > 0 && map[py])
+		sizemap.rows = ft_strlen(map[py]);
+	else
+		return (FAIL);
 	if (px < 0 || px >= sizemap.rows || py < 0 || py >= sizemap.cols)
 		return (FAIL);
-	if (map[py][px] && map[py][px] == '1')
+	if (map[py] && map[py][px] == '1')
 		return (FAIL);
 	return (SUCCESS);
 }
